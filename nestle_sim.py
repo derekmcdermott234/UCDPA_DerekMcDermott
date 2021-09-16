@@ -26,7 +26,7 @@ nestle_clean=nestle_drop_dup_na                     #rename the cleaned datafram
 nestle_close_price=nestle_clean['Close']            #copy the Close price column from nestle_clean to a new
 def check_for_zeros(x):               #define function to check for zeros in a series or list
    nestle_int_check=x.astype(int)
-   return nestle_int_check[nestle_int_check==0].sum()
+   return nestle_int_check[nestle_int_check==0].count()
 print(check_for_zeros(nestle_close_price))     #call on the function to check nestle_close_price data for zeros
 print(nestle_close_price) #print the nestle close price data to inspect that the first date
                           # and last date are as expected
@@ -34,9 +34,6 @@ nestle_daily_returns=nestle_close_price.pct_change().dropna() #calculate the day
                                                               #closing price data and drop the first value which is NaN
 
 print(nestle_daily_returns)                                   #print the daily returns values to inspect
-
-z=0
-j=0
 price_18aug2021=nestle_close_price[2728] #store the closing share price on the 18/08/2021 as a constant
 print('The price on 18/08/2021 is: ',price_18aug2021)
 mu = nestle_daily_returns[:2729].mean() #calcullate the mean of the daily returns up to 17/08/2021
