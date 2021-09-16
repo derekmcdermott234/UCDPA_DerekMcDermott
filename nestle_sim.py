@@ -1,6 +1,6 @@
 #This is a python script to try and predict the change in the nestle
 #share price on the Swiss stock exchange.Here I am attempting to predict
-#the nestle share price 20 days into the future based on the past 10years
+#the nestle share price 10 days into the future based on the past 10years
 #of share price data for nestle as obtained fron Yahoo Finance.
 import matplotlib.pyplot as plt #Import the matplotlib.ptplot libary
 import numpy as np              #Import numpy for numerical calculations
@@ -30,37 +30,38 @@ def check_for_zeros(x):               #define function to check for zeros in a s
 print(check_for_zeros(nestle_close_price))     #call on the function to check nestle_close_price data for zeros
 print(nestle_close_price) #print the nestle close price data to inspect that the first date
                           # and last date are as expected
+
 nestle_daily_returns=nestle_close_price.pct_change().dropna() #calculate the day by day returns on the daily
                                                               #closing price data and drop the first value which is NaN
-
-print(nestle_daily_returns)                                   #print the daily returns values to inspect
-price_18aug2021=nestle_close_price[2728] #store the closing share price on the 18/08/2021 as a constant
-print('The price on 18/08/2021 is: ',price_18aug2021)
-mu = nestle_daily_returns[:2729].mean() #calcullate the mean of the daily returns up to 17/08/2021
-standard_dev=nestle_daily_returns[:2729].std() #calcullate the standard deviation of the daily returns up to 17/08/2021
+mu = nestle_daily_returns.loc[:'2021-08-18'].mean() #calcullate the mean of the daily returns up to 18/08/2021
+standard_dev=nestle_daily_returns.loc[:'2021-08-18'].std() #calcullate the standard deviation of the daily returns up to 17/08/2021
 print('...')
 print(mu,standard_dev) #print the mean and standard deviation of the daily returns series
 print('...')
-Index_1=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19] #create an index for a new dataframe with 20 rows
+
+Index_1=[0,1,2,3,4,5,6,7,8,9] #create an index for a new dataframe with 10 rows
 neww=pd.DataFrame() #A new dataframe is created to store the simulated stock price data
 neww['Index']=Index_1 #assign the values in the Index_1 list to the neww dataframe column 'Index'
 
-neww=neww.set_index('Index') #set the index of the new dataframe to Index_1 i.e.0 to 19
-neww['Actual Nestle Close Price'] = np.array(nestle_close_price.iloc[2728:2748])
+neww=neww.set_index('Index') #set the index of the new dataframe to Index_1 i.e.0 to 9
+neww['Actual Nestle Close Price'] = np.array(nestle_close_price.iloc[2729:2739]) #10 nestle data points for the actual closing
+                                                                                 # price from 18/08/2021-31/08/2021
+
+
+print(neww['Actual Nestle Close Price'])
 phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,10000)) #create a 1 x 1000 array of random numbers
                                                                  #drawn from a gussian distribution with the
                                                                  #mean and standard deviation of all daily returns
-                                                                 #from 04/10/2010-18/08/2021
-
-set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] #create a constant list of 20 values to be referenced
-                                                                  #within the loop structure to follow.
-#in one run generate 20 simulated closing prices from 18/08/2021 onwards and add this singe run as a column of data
+price_18aug2021 = nestle_close_price.loc['18/08/2021']  # store the closing share price on the 18/08/2021 as a constant
+print('The price on 18/08/2021 is: ', price_18aug2021)
+set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0] #create a constant list of 20 values to be referenced
+                                                                  #within the loop structure to follow.#in one run generate 20 simulated closing prices from 18/08/2021 onwards and add this singe run as a column of data
 #to the right of the neww dataframe
 #the columns with 20 data entries are added to the neww dataframe 100 times,100 runs of 20 days
 for l in range(0,1000):    #100 simulations will be run
    y = price_18aug2021    #reset y to the close price on 18/aug/2021
    prices_1=set_price     #reset prices_1 array before it accepts new values from the k indexed loop
-   for k in range(0,19):
+   for k in range(0,9):
       y = y+y*(phi[0][l+k]) #multiply the previous day's closing price by a randomly generated return value
       prices_1[k+1]=y       #store the next day's simulated closing price in a list
    d_series=pd.Series(prices_1) #convert the list to a series before you can add it to neww
