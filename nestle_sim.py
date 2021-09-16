@@ -5,7 +5,8 @@
 import matplotlib.pyplot as plt #Import the matplotlib.ptplot libary
 import numpy as np              #Import numpy for numerical calculations
 import pandas as pd             #Import the pandas data open source data analysis and manipulation tool
-
+import seaborn as sns
+from fitter import Fitter, get_common_distributions, get_distributions
 nestle=pd.read_csv('C:/Users/derek/Desktop/ucd/Working Data/'   #I am importing data from Yahoo for the nestle share price
                   'yahoo data/NESN.SW.csv',                     #from 14/10/2010-13/09/2021
                    parse_dates=['Date'],index_col='Date')       #The data is imported as a csv file and read into the dataframe
@@ -58,7 +59,7 @@ set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0] #create a constant list of 20 valu
                                                                   #within the loop structure to follow.#in one run generate 20 simulated closing prices from 18/08/2021 onwards and add this singe run as a column of data
 #to the right of the neww dataframe
 #the columns with 20 data entries are added to the neww dataframe 100 times,100 runs of 20 days
-for l in range(0,1000):    #100 simulations will be run
+for l in range(0,100):    #100 simulations will be run
    y = price_18aug2021    #reset y to the close price on 18/aug/2021
    prices_1=set_price     #reset prices_1 array before it accepts new values from the k indexed loop
    for k in range(0,9):
@@ -85,29 +86,40 @@ sim_6 = neww.iloc[:, 5:6];
 sim_7 = neww.iloc[:, 6:7];
 sim_8 = neww.iloc[:, 7:8];
 sim_9 = neww.iloc[:, 8:9]
-fig,ax=plt.subplots(3,3) #defines figure/fig which is the canvas that may contain 1 or more Axes
+fig,ax=plt.subplots(1,2) #defines figure/fig which is the canvas that may contain 1 or more Axes
                          #defines Axes/ax represents an individual plot drawn on figure
+plt.xlabel('x')
+plt.ylabel('y')
+ax[0].plot(neww['Actual Nestle Close Price'], color='b')
+ax[0].plot(c_neww['MEAN'], color='r')
+ax[0].set_title('Average sim run v actual ')
+ax[0].set_xlabel('Days since 18/08/2021')
+ax[0].set_ylabel('Close Price')
+ax[1].plot(neww['Actual Nestle Close Price'], color='b')
+ax[1].plot(sim_2, color='r')
+ax[1].set_title('Single sim run v actual ')
+ax[1].set_xlabel('Days since 18/08/2021')
+ax[1].set_ylabel('Close Price')
 
-ax[0][0].plot(neww['Actual Nestle Close Price'], color='b')
-ax[0][0].plot(c_neww['MEAN'], color='r')
-ax[0][1].plot(neww['Actual Nestle Close Price'], color='b')
-ax[0][1].plot(sim_2, color='r')
-ax[0][2].plot(neww['Actual Nestle Close Price'], color='b')
-ax[0][2].plot(sim_3, color='r')
-ax[1][0].plot(neww['Actual Nestle Close Price'], color='b')
-ax[1][0].plot(sim_4, color='r')
-ax[1][1].plot(neww['Actual Nestle Close Price'], color='b')
-ax[1][1].plot(sim_5, color='r')
-ax[1][2].plot(neww['Actual Nestle Close Price'], color='b')
-ax[1][2].plot(sim_6, color='r')
-ax[2][0].plot(neww['Actual Nestle Close Price'], color='b')
-ax[2][0].plot(sim_7, color='r')
-ax[2][1].plot(neww['Actual Nestle Close Price'], color='b')
-ax[2][1].plot(sim_8, color='r')
-ax[2][2].plot(neww['Actual Nestle Close Price'], color='b')
-ax[2][2].plot(sim_9, color='r')
+
+#nestle_daily_returns.plot(kind='hist')
+#sns.set_style('white')
+#sns.set_context("paper", font_scale = 2)
+sns.displot(nestle_daily_returns, kind='hist', bins = 100, aspect = 1.5).set(title='Title of Plot')
+plt.title('Life Expectancy')
+plt.xlabel('Life Exp (years)')
+plt.ylabel('Frequency')
+f = Fitter(nestle_daily_returns,
+           distributions=['gamma',
+                          'lognorm',
+                          "beta",
+                          "burr",
+                          "norm",
+                          "t"])
+f.fit()
+print(f.summary())
 plt.show()#
-print(neww['Actual Nestle Close Price'])
+
 #the averaged run data from 100 simulated runs of 20 days is stored in a csv file
 #c_neww['MEAN'].to_csv('C:/Users/derek/Desktop/ucd/Working Data/yahoo data/nestle_mean_columns.csv',mode='a', index=False, header=True)
 
