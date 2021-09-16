@@ -5,8 +5,7 @@
 import matplotlib.pyplot as plt #Import the matplotlib.ptplot libary
 import numpy as np              #Import numpy for numerical calculations
 import pandas as pd             #Import the pandas data open source data analysis and manipulation tool
-fig,ax=plt.subplots(3,3)        #defines figure/fig which is the canvas that may contain 1 or more Axes
-                                #defines Axes/ax represents an individual plot drawn on figure
+
 nestle=pd.read_csv('C:/Users/derek/Desktop/ucd/Working Data/'   #I am importing data from Yahoo for the nestle share price
                   'yahoo data/NESN.SW.csv',                     #from 14/10/2010-13/09/2021
                    parse_dates=['Date'],index_col='Date')       #The data is imported as a csv file and read into the dataframe
@@ -88,6 +87,9 @@ sim_6 = neww.iloc[:, 5:6];
 sim_7 = neww.iloc[:, 6:7];
 sim_8 = neww.iloc[:, 7:8];
 sim_9 = neww.iloc[:, 8:9]
+fig,ax=plt.subplots(3,3) #defines figure/fig which is the canvas that may contain 1 or more Axes
+                         #defines Axes/ax represents an individual plot drawn on figure
+
 ax[0][0].plot(neww['Actual Nestle Close Price'], color='b')
 ax[0][0].plot(c_neww['MEAN'], color='r')
 ax[0][1].plot(neww['Actual Nestle Close Price'], color='b')
