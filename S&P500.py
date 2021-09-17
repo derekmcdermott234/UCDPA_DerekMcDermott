@@ -19,4 +19,4 @@ SP_500_cleaned=SP_500_nona_dropped
 SP500_AAL=SP_500_cleaned[SP_500_cleaned['Name']=='AAL']
 print(SP500_AAL.head())
 print(SP500_AAL.tail())
-print(SP500_AAL.info())
+print(SP500_AAL.info())#
