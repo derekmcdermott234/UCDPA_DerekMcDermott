@@ -40,29 +40,25 @@ print('...')
 print(mu,standard_dev) #print the mean and standard deviation of the daily returns series
 print('...')
 
-Index_1=[0,1,2,3,4,5,6,7,8,9] #create an index for a new dataframe with 10 rows
+Index_1=[0,1,2,3,4,5,6,7,8,9,10] #create an index for a new dataframe with 10 rows
 neww=pd.DataFrame() #A new dataframe is created to store the simulated stock price data
 neww['Index']=Index_1 #assign the values in the Index_1 list to the neww dataframe column 'Index'
-
 neww=neww.set_index('Index') #set the index of the new dataframe to Index_1 i.e.0 to 9
-neww['Actual Nestle Close Price'] = np.array(nestle_close_price.iloc[2729:2739]) #10 nestle data points for the actual closing
-                                                                                 # price from 18/08/2021-31/08/2021
-
-
-print(neww['Actual Nestle Close Price'])
-phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,10000)) #create a 1 x 1000 array of random numbers
+neww['Actual Nestle Close Price'] = np.array(nestle_close_price.iloc[2729:2740]) #10 nestle data points for the actual closing
+print(neww['Actual Nestle Close Price'])                                                                                 # price from 18/08/2021-31/08/2021
+phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,11000)) #create a 1 x 1000 array of random numbers
                                                                  #drawn from a gussian distribution with the
                                                                  #mean and standard deviation of all daily returns
 price_18aug2021 = nestle_close_price.loc['18/08/2021']  # store the closing share price on the 18/08/2021 as a constant
 print('The price on 18/08/2021 is: ', price_18aug2021)
-set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0] #create a constant list of 20 values to be referenced
+set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0] #create a constant list of 11 values to be referenced
                                                                   #within the loop structure to follow.#in one run generate 20 simulated closing prices from 18/08/2021 onwards and add this singe run as a column of data
 #to the right of the neww dataframe
 #the columns with 20 data entries are added to the neww dataframe 100 times,100 runs of 20 days
 for l in range(0,1000):    #100 simulations will be run
    y = price_18aug2021    #reset y to the close price on 18/aug/2021
    prices_1=set_price     #reset prices_1 array before it accepts new values from the k indexed loop
-   for k in range(0,9):
+   for k in range(0,10):
       y = y+y*(phi[0][l+k]) #multiply the previous day's closing price by a randomly generated return value
       prices_1[k+1]=y       #store the next day's simulated closing price in a list
    d_series=pd.Series(prices_1) #convert the list to a series before you can add it to neww
@@ -71,13 +67,11 @@ for l in range(0,1000):    #100 simulations will be run
 c_neww=neww.drop("Actual Nestle Close Price",axis=1) #create a new dataframe with the actual nestle closing
                                                      # prices column dropped
 #the average run from 100 simulated runs of 20 days is computed
-c_neww['MEAN']=c_neww.mean(axis=1) #get the mean value of each row and store in a new column 'MEAN'
-print(c_neww['MEAN'].head())
-print(c_neww.info())
-print('...')
-print(neww.info())
-print(neww)
-print('...')
+MEAN_1 =c_neww.mean(axis=1).tolist() #get the mean value of each row and store in a new column 'MEAN'
+STD_1=c_neww.std(axis=1).tolist()
+Mean_array=np.array(MEAN_1)
+STD_array=np.array(STD_1)
+M_plus_std=Mean_array+STD_array;M_minus_std=Mean_array-STD_array
 sim_2 = neww.iloc[:, 1:2];
 sim_3 = neww.iloc[:, 2:3];
 sim_4 = neww.iloc[:, 3:4];
@@ -91,8 +85,10 @@ fig,ax=plt.subplots(1,2) #defines figure/fig which is the canvas that may contai
 plt.xlabel('x')
 plt.ylabel('y')
 ax[0].plot(neww['Actual Nestle Close Price'], color='b')
-ax[0].plot(c_neww['MEAN'], color='r')
-ax[0].set_title('Average sim run v actual ')
+ax[0].plot(MEAN_1, color='r')
+ax[0].plot(M_plus_std, color='g')
+ax[0].plot(M_minus_std, color='y')
+ax[0].set_title('Average of 1000 sim runs v actual ')
 ax[0].set_xlabel('Days since 18/08/2021')
 ax[0].set_ylabel('Close Price')
 ax[1].plot(neww['Actual Nestle Close Price'], color='b')
@@ -122,8 +118,8 @@ fig,ax=plt.subplots()
 nestle_daily_returns.plot(kind='hist',bins=50)
 plt.xlabel('Daily returns')
 plt.ylabel('Count')
+plt.title('Histogram of actual daily returns of nestle share price from 04/10/2010-18/08/2021')
 plt.show()#
 
-#the averaged run data from 100 simulated runs of 20 days is stored in a csv file
-#c_neww['MEAN'].to_csv('C:/Users/derek/Desktop/ucd/Working Data/yahoo data/nestle_mean_columns.csv',mode='a', index=False, header=True)
+
 
