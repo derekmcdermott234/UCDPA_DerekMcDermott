@@ -82,7 +82,7 @@ plt.plot(neww['Actual Nestle Close Price'],color='b')
 plt.plot(c_neww['MED'],color='g')
 plt.plot(neww.iloc[:,1:2],color='r')
 
-plt.show()#
+plt.show()
 
 #the averaged run data from 100 simulated runs of 20 days is stored in a csv file
 #c_neww['MEAN'].to_csv('C:/Users/derek/Desktop/ucd/Working Data/yahoo data/nestle_mean_columns.csv',mode='a', index=False, header=True)
