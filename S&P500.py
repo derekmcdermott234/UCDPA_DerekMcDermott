@@ -15,10 +15,8 @@ SP_500_nona=SP_500.fillna(method='ffill')
 print('2:',SP_500_nona.isnull().sum())
 SP_500_nona_dropped=SP_500_nona.drop_duplicates()
 print(SP_500.shape,SP_500_nona_dropped.shape)
-#print(nestle.shape,nestle_drop_na.shape)
-
-#nestle_drop_dup_na=nestle_drop_na.drop_duplicates()
-#print(nestle.shape,nestle_drop_dup_na.shape)
-#nestle_clean=nestle_drop_dup_na
-#nestle_close_price=nestle_clean['Close']
-#SP500_AAL=SP_500[SP_500['Name']=='AAL']
+SP_500_cleaned=SP_500_nona_dropped
+SP500_AAL=SP_500_cleaned[SP_500_cleaned['Name']=='AAL']
+print(SP500_AAL.head())
+print(SP500_AAL.tail())
+print(SP500_AAL.info())
