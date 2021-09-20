@@ -35,7 +35,7 @@ def check_for_zeros(x):                    #define function to check for zeros i
    int_check=x.astype(int)                 #convert floating point data in passed series to integer type data
    return int_check[int_check==0].count()  #count the zeros in the passed list and return the result.
 print(check_for_zeros(nestle_close_price))     #call on the function to check nestle_close_price data for zeros
-print(nestle_close_price) #print the nestle close price data to inspect
+print(nestle_close_price.head()) #print the nestle close price data to inspect
 
 
 nestle_daily_returns=nestle_close_price.pct_change().dropna() #calculate the day by day returns on the daily
@@ -220,19 +220,19 @@ ax[2][2].set_ylabel('')
 fig,ax=plt.subplots(3,3)
 ax[0][0].plot(NESTLE_CLOSE, color='b')
 ax[0][0].plot(RESAMP_SIM_ONLY.iloc[:, 0:1], color='r')
-ax[0][0].set_title('Historical random sim v nestle close')
+ax[0][0].set_title('Historical sim v nestle close')
 ax[0][0].set_xlabel('')
 ax[0][0].set_ylabel('Close Price')
 #---
 ax[0][1].plot(NESTLE_CLOSE, color='b')
 ax[0][1].plot(RESAMP_SIM_ONLY.iloc[:, 1:2], color='r')
-ax[0][1].set_title('Historical random sim v nestle close')
+ax[0][1].set_title('Historical sim v nestle close')
 ax[0][1].set_xlabel('')
 ax[0][1].set_ylabel('')
 #---
 ax[0][2].plot(NESTLE_CLOSE, color='b')
 ax[0][2].plot(RESAMP_SIM_ONLY.iloc[:, 2:3], color='r')
-ax[0][2].set_title('Historical random sim v nestle close')
+ax[0][2].set_title('Historical sim v nestle close')
 ax[0][2].set_xlabel('')
 ax[0][2].set_ylabel('')
 #---
@@ -272,7 +272,6 @@ ax[2][2].set_title('')
 ax[2][2].set_xlabel('Days since 18/08/2021')
 ax[2][2].set_ylabel('')
 #------------------------
-
 
 p=sns.displot(nestle_daily_returns, kind='hist', bins = 100, aspect = 1.5)
 p.set(title = "Title")
