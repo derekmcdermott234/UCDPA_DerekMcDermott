@@ -307,7 +307,7 @@ plt.plot(cumulative_returns)
 plt.xlabel('Days since 04/10/2010')
 plt.ylabel('Cumulative return (%)')
 plt.title('Cumulative daily percentage return v time for NESN')
-plt.show()#
+plt.show()##
 
 
 print(NORM_SIM_ONLY.iloc[:,0:5].head(5))
