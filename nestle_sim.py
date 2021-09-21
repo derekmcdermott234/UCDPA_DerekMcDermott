@@ -79,7 +79,7 @@ set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0] #variable lists have been set up
 get_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0] #they will be used to reset share prices between simulations
 #Here 1400 different simulations will be run
 
-for l in range(0,1400):    #1400 simulations will be run
+for l in range(0,400):    #1400 simulations will be run
    y_1 = price_18aug2021    #reset y_1 and y_2 to the close price on 18/aug/2021 before the next
    y_2 = price_18aug2021    #monte carlo run of prices is generated
    norm_prices=set_price   #reset norm_prices array before it accepts 10 new Gaussian additions from the k indexed loop
@@ -290,7 +290,23 @@ nestle_daily_returns.plot(kind='hist',bins=50)
 plt.xlabel('Daily returns')
 plt.ylabel('Count')
 plt.title('Histogram of actual daily returns of nestle share price from 04/10/2010-18/08/2021')
+
+#-----
+fig,ax=plt.subplots()
+plt.plot(nestle_close_price[:2730].tolist())
+plt.xlabel('Date')
+plt.ylabel('Nestle Close Price')
+plt.title('Daily nestle close price v date from 04/10/2010-18/08/2021')
+#-----
+cumulative_returns=nestle_daily_returns.cumsum().tolist()
+cumulative_returns_array=np.array(cumulative_returns)*100
+fig,ax=plt.subplots()
+plt.plot(cumulative_returns_array)
+plt.xlabel('Days since 04/10/2010')
+plt.ylabel('Cumulative return (%)')
+plt.title('Cumulative daily percentage return v time for NESN')
 plt.show()#
+cumulative_returns=nestle_daily_returns.cumsum()
 
 print(NORM_SIM_ONLY.iloc[:,0:5].head(5))
 print(RESAMP_SIM_ONLY.iloc[:,0:5].head(5))
