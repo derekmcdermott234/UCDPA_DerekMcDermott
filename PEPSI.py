@@ -1,7 +1,7 @@
-#This is a python script to try and predict the change in the nestle
-#share price on the Swiss stock exchange.Here I am attempting to predict
-#the nestle share price 10 days into the future based on the past 10years
-#of share price data for nestle as obtained fron Yahoo Finance.
+#This is a python script to try and predict the change in the pepsi
+#share price on the Nasdaq stock exchange.Here I am attempting to predict
+#the pepsi share price 10 days into the future based on its history from 2012 onwards
+#the share price data for pepsi is obtained fron Yahoo Finance.
 import matplotlib.pyplot as plt #Import the matplotlib.ptplot libary
 import numpy as np              #Import numpy for numerical calculations
 import pandas as pd             #Import the pandas data open source data analysis and manipulation tool
@@ -12,30 +12,30 @@ from fitter import Fitter, get_common_distributions, get_distributions  #fitter 
                                                                         #samples is generated from
 
 
-PEPSI=pd.read_csv('C:/Users/derek/Desktop/ucd/Working Data/'   #I am importing data from Yahoo for the nestle share price
+PEPSI=pd.read_csv('C:/Users/derek/Desktop/ucd/Working Data/'   #I am importing data from Yahoo for the pepsi share price
                   'yahoo data/PEP.csv',                     #from 14/10/2010-13/09/2021
                    parse_dates=['Date'],index_col='Date')       #The data is imported as a csv file and read into the dataframe
-                                                                #nestle,the dates in the date column are converted to datetime object
+                                                                #pepsi,the dates in the date column are converted to datetime object
                                                                 #The date column is set as the index column.
 
-print(PEPSI.shape)              #print the shape of the dataframe nestle
-print(PEPSI.info())             #print information on the dataframe nestle
+print(PEPSI.shape)              #print the shape of the dataframe pepsi
+print(PEPSI.info())             #print information on the dataframe pepsi
 print(PEPSI.head())             #Show the first 5 rows of nestle
 print(PEPSI.isnull().sum())     #print the missing values count for each column
-pepsi_drop_na=PEPSI.dropna()   #drop missing values from nestle and store as a new dataframe nestle_drop_na
+pepsi_drop_na=PEPSI.dropna()   #drop missing values from pepsi and store as a new dataframe nestle_drop_na
 print(PEPSI.shape,pepsi_drop_na.shape)  #print the shape of the dataframe with dropped n/a's compared to the
-                                          # original nestle data frame
+                                          # original pepsi data frame
 pepsi_drop_dup_na=pepsi_drop_na.drop_duplicates() #also drop rows that are duplicate and store as new dataframe
-                                                    #nestle_drop_dup_na
-print(PEPSI.shape,pepsi_drop_dup_na.shape)        #compare original nestle dataframe to cleaned dataframe
-pepsi_clean=pepsi_drop_dup_na                     #rename the cleaned dataframe as nestle_clean
-pepsi_close_price=pepsi_clean['Close']            #get the Close price column from nestle_clean to a new
-                                                    #series 'nestle_close_price'
+                                                    #pepsi_drop_dup_na
+print(PEPSI.shape,pepsi_drop_dup_na.shape)        #compare original pepsi dataframe to cleaned dataframe
+pepsi_clean=pepsi_drop_dup_na                     #rename the cleaned dataframe as pepsi_clean
+pepsi_close_price=pepsi_clean['Close']            #get the Close price column from pepsi_clean to a new
+                                                    #series 'pepsi_close_price'
 def check_for_zeros(x):                    #define function to check for zeros in a series or list
    int_check=x.astype(int)                 #convert floating point data in passed series to integer type data
    return int_check[int_check==0].count()  #count the zeros in the passed list and return the result.
-print(check_for_zeros(pepsi_close_price))     #call on the function to check nestle_close_price data for zeros
-print(pepsi_close_price.head()) #print the nestle close price data to inspect
+print(check_for_zeros(pepsi_close_price))     #call on the function to check pepsi_close_price data for zeros
+print(pepsi_close_price.head()) #print the pepsi close price data to inspect
 
 
 pepsi_daily_returns=pepsi_close_price.pct_change().dropna() #calculate the day by day returns on the daily
@@ -63,10 +63,10 @@ phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,15000)) #generate an a
                                                                   #from a gaussian distribution with a mean of 'mu' and
                                                                   # a standard deviation of 'standard_dev'
 
-PEPSI_CLOSE= np.array(pepsi_close_price.iloc[2382:2393])     #get 11 nestle close prices from 18/08/2021
+PEPSI_CLOSE= np.array(pepsi_close_price.iloc[2382:2393])     #get 11 pepsi close prices from 18/08/2021
                                                                # plus 10 days when stock market is open
 
-pepsi_close_price_index=pepsi_close_price.iloc[2382:2393].index #get the dates from the nestle close price series
+pepsi_close_price_index=pepsi_close_price.iloc[2382:2393].index #get the dates from the pepsi close price series
 pepsi_close_price_index=pd.to_datetime(pepsi_close_price_index) #and convert to datetime objects
 pepsi_close_price_index=pepsi_close_price_index.date            #drop the HH:MM:SS data and just keep the date.j
 print(pepsi_close_price_index)
@@ -120,9 +120,9 @@ First_RESAMP_SIM_ONLY_sim = RESAMP_SIM_ONLY.iloc[:, 0:1] #Extract the random wal
 
 #Main plotting section of code --------------------------------------------------------------------------------------
 
-#First plot the actual nestle daily close price path from 18/09/2021 for 10 days
+#First plot the actual pepsi daily close price path from 18/09/2021 for 10 days
 fig,ax=plt.subplots(1,2)
-ax[0].plot(PEPSI_CLOSE,label="Actual Nestle Close price",color='b',marker='.') #First plot the actual nestle daily close price path from 18/09/2021 for 10 days
+ax[0].plot(PEPSI_CLOSE,label="Actual Close price",color='b',marker='.') #First plot the actual nestle daily close price path from 18/09/2021 for 10 days
 ax[0].legend()
 ax[0].plot(MEAN_NRM, color='g',label="MEAN") #Plot the average expected nestle close price path based on 1400 gaussian runs
 ax[0].legend()
@@ -138,7 +138,7 @@ ax[0].plot(MEAN_NRM_minus_2STD,color='m',linestyle='--',label="MEAN-2sigma") #da
 ax[0].legend()
 ax[0].set_title('1400 Gaussian sim runs v Actual close price  ') #plot title
 ax[0].set_xlabel('Days since 18/08/2021') #plot x label
-ax[0].set_ylabel('Close Price') #plot y label
+ax[0].set_ylabel('Close Price($)') #plot y label
 
 
 ax[1].plot(PEPSI_CLOSE,label="Actual Close price",color='b',marker='.')
@@ -157,25 +157,25 @@ ax[1].plot(MEAN_RS_minus_2STD,color='m',linestyle='--',label="MEAN-2sigma")
 ax[1].legend()
 ax[1].set_title('1400 sim runs of resampled data v actual close price  ')
 ax[1].set_xlabel('Days since 18/08/2021')
-ax[1].set_ylabel('Close Price')
+ax[1].set_ylabel('Close Price($)')
 
 #Plot a 3 x 3 grid of typical gaussian generated close price paths from 18/09/2021 +10 stock market days.
 fig,ax=plt.subplots(3,3)
 ax[0][0].plot(PEPSI_CLOSE, color='b')
 ax[0][0].plot(NORM_SIM_ONLY.iloc[:, 0:1], color='r')
-ax[0][0].set_title('Gaussian sim run v nestle close')
+ax[0][0].set_title('Gaussian sim run v pepsi close')
 ax[0][0].set_xlabel('')
-ax[0][0].set_ylabel('Close Price')
+ax[0][0].set_ylabel('Close Price($)')
 #---
 ax[0][1].plot(PEPSI_CLOSE, color='b')
 ax[0][1].plot(NORM_SIM_ONLY.iloc[:, 1:2], color='r')
-ax[0][1].set_title('Gaussian sim run v nestle close')
+ax[0][1].set_title('Gaussian sim run v pepsi close')
 ax[0][1].set_xlabel('')
 ax[0][1].set_ylabel('')
 #---
 ax[0][2].plot(PEPSI_CLOSE, color='b')
 ax[0][2].plot(NORM_SIM_ONLY.iloc[:, 2:3], color='r')
-ax[0][2].set_title('Gaussian sim run v nestle close')
+ax[0][2].set_title('Gaussian sim run v pepsi close')
 ax[0][2].set_xlabel('')
 ax[0][2].set_ylabel('')
 #---
@@ -183,7 +183,7 @@ ax[1][0].plot(PEPSI_CLOSE, color='b')
 ax[1][0].plot(NORM_SIM_ONLY.iloc[:, 3:4], color='r')
 ax[1][0].set_title('')
 ax[1][0].set_xlabel('Days since 18/08/2021')
-ax[1][0].set_ylabel('Close Price')
+ax[1][0].set_ylabel('Close Price($)')
 
 ax[1][1].plot(PEPSI_CLOSE, color='b')
 ax[1][1].plot(NORM_SIM_ONLY.iloc[:, 4:5], color='r')
@@ -201,7 +201,7 @@ ax[2][0].plot(PEPSI_CLOSE, color='b')
 ax[2][0].plot(NORM_SIM_ONLY.iloc[:, 6:7], color='r')
 ax[2][0].set_title('')
 ax[2][0].set_xlabel('Days since 18/08/2021')
-ax[2][0].set_ylabel('Close Price')
+ax[2][0].set_ylabel('Close Price($)')
 
 ax[2][1].plot(PEPSI_CLOSE, color='b')
 ax[2][1].plot(NORM_SIM_ONLY.iloc[:, 7:8], color='r')
@@ -220,19 +220,19 @@ ax[2][2].set_ylabel('')
 fig,ax=plt.subplots(3,3)
 ax[0][0].plot(PEPSI_CLOSE, color='b')
 ax[0][0].plot(RESAMP_SIM_ONLY.iloc[:, 0:1], color='r')
-ax[0][0].set_title('Historical sim v nestle close')
+ax[0][0].set_title('Historical sim v pepsi close')
 ax[0][0].set_xlabel('')
-ax[0][0].set_ylabel('Close Price')
+ax[0][0].set_ylabel('Close Price($)')
 #---
 ax[0][1].plot(PEPSI_CLOSE, color='b')
 ax[0][1].plot(RESAMP_SIM_ONLY.iloc[:, 1:2], color='r')
-ax[0][1].set_title('Historical sim v nestle close')
+ax[0][1].set_title('Historical sim v pepsi close')
 ax[0][1].set_xlabel('')
 ax[0][1].set_ylabel('')
 #---
 ax[0][2].plot(PEPSI_CLOSE, color='b')
 ax[0][2].plot(RESAMP_SIM_ONLY.iloc[:, 2:3], color='r')
-ax[0][2].set_title('Historical sim v nestle close')
+ax[0][2].set_title('Historical sim v pepsi close')
 ax[0][2].set_xlabel('')
 ax[0][2].set_ylabel('')
 #---
@@ -240,7 +240,7 @@ ax[1][0].plot(PEPSI_CLOSE, color='b')
 ax[1][0].plot(RESAMP_SIM_ONLY.iloc[:, 3:4], color='r')
 ax[1][0].set_title('')
 ax[1][0].set_xlabel('Days since 18/08/2021')
-ax[1][0].set_ylabel('Close Price')
+ax[1][0].set_ylabel('Close Price($)')
 
 ax[1][1].plot(PEPSI_CLOSE, color='b')
 ax[1][1].plot(RESAMP_SIM_ONLY.iloc[:, 4:5], color='r')
@@ -258,7 +258,7 @@ ax[2][0].plot(PEPSI_CLOSE, color='b')
 ax[2][0].plot(RESAMP_SIM_ONLY.iloc[:, 6:7], color='r')
 ax[2][0].set_title('')
 ax[2][0].set_xlabel('Days since 18/08/2021')
-ax[2][0].set_ylabel('Close Price')
+ax[2][0].set_ylabel('Close Price($)')
 
 ax[2][1].plot(PEPSI_CLOSE, color='b')
 ax[2][1].plot(RESAMP_SIM_ONLY.iloc[:, 7:8], color='r')
@@ -289,24 +289,24 @@ fig,ax=plt.subplots()
 pepsi_daily_returns.plot(kind='hist',bins=50)
 plt.xlabel('Daily returns')
 plt.ylabel('Count')
-plt.title('Histogram of actual daily returns of nestle share price from 04/10/2010-18/08/2021')
+plt.title('Histogram of actual daily returns of pepsi share price from 01/03/2012-18/08/2021')
 
 #-----
 fig,ax=plt.subplots()
-plt.plot(pepsi_close_price[:2730].tolist())
-plt.xlabel('Date')
-plt.ylabel('Nestle Close Price')
-plt.title('Daily nestle close price v date from 04/10/2010-18/08/2021')
+plt.plot(pepsi_close_price[:2383].tolist())
+plt.xlabel('Days since 01/03/2012')
+plt.ylabel('Pepsi Close Price($)')
+plt.title('Daily pepsi close price v date from 01/03/2012-18/08/2021')
 #-----
 cumulative_returns=pepsi_daily_returns.cumsum().tolist()
 cumulative_returns_array=np.array(cumulative_returns)*100
 fig,ax=plt.subplots()
 plt.plot(cumulative_returns_array)
-plt.xlabel('Days since 04/10/2010')
+plt.xlabel('Days since 01/03/2012')
 plt.ylabel('Cumulative return (%)')
-plt.title('Cumulative daily percentage return v time for NESN')
+plt.title('Cumulative daily percentage return v time for PEP')
 plt.show()#
-cumulative_returns=pepsi_daily_returns.cumsum()
+
 
 print(NORM_SIM_ONLY.iloc[:,0:5].head(5))
 print(RESAMP_SIM_ONLY.iloc[:,0:5].head(5))
