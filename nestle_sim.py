@@ -79,7 +79,7 @@ set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0] #variable lists have been set up
 get_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0] #they will be used to reset share prices between simulations
 #Here 1400 different simulations will be run
 
-for l in range(0,400):    #1400 simulations will be run
+for l in range(0,1400):    #1400 simulations will be run
    y_1 = price_18aug2021    #reset y_1 and y_2 to the close price on 18/aug/2021 before the next
    y_2 = price_18aug2021    #monte carlo run of prices is generated
    norm_prices=set_price   #reset norm_prices array before it accepts 10 new Gaussian additions from the k indexed loop
@@ -136,12 +136,12 @@ ax[0].plot(MEAN_NRM_plus_2STD,color='m',linestyle='--',label="MEAN+2sigma") #dai
 ax[0].legend()
 ax[0].plot(MEAN_NRM_minus_2STD,color='m',linestyle='--',label="MEAN-2sigma") #daily close price path that is +2 std from the mean path
 ax[0].legend()
-ax[0].set_title('1400 Gaussian sim runs v Actual close price  ') #plot title
+ax[0].set_title('1400 Gaussian sim runs v actual close price  ') #plot title
 ax[0].set_xlabel('Days since 18/08/2021') #plot x label
-ax[0].set_ylabel('Close Price') #plot y label
+ax[0].set_ylabel('Close Price(SFr)') #plot y label
 
 
-ax[1].plot(NESTLE_CLOSE,label="Actual Close price",color='b',marker='.')
+ax[1].plot(NESTLE_CLOSE,label="Actual Nestle Close price",color='b',marker='.')
 ax[1].legend()
 ax[1].plot(MEAN_RS, color='g',label="MEAN")
 ax[1].legend()
@@ -157,7 +157,7 @@ ax[1].plot(MEAN_RS_minus_2STD,color='m',linestyle='--',label="MEAN-2sigma")
 ax[1].legend()
 ax[1].set_title('1400 sim runs of resampled data v actual close price  ')
 ax[1].set_xlabel('Days since 18/08/2021')
-ax[1].set_ylabel('Close Price')
+ax[1].set_ylabel('Close Price(SFr)')
 
 #Plot a 3 x 3 grid of typical gaussian generated close price paths from 18/09/2021 +10 stock market days.
 fig,ax=plt.subplots(3,3)
@@ -165,7 +165,7 @@ ax[0][0].plot(NESTLE_CLOSE, color='b')
 ax[0][0].plot(NORM_SIM_ONLY.iloc[:, 0:1], color='r')
 ax[0][0].set_title('Gaussian sim run v nestle close')
 ax[0][0].set_xlabel('')
-ax[0][0].set_ylabel('Close Price')
+ax[0][0].set_ylabel('Close Price(SFr)')
 #---
 ax[0][1].plot(NESTLE_CLOSE, color='b')
 ax[0][1].plot(NORM_SIM_ONLY.iloc[:, 1:2], color='r')
@@ -183,7 +183,7 @@ ax[1][0].plot(NESTLE_CLOSE, color='b')
 ax[1][0].plot(NORM_SIM_ONLY.iloc[:, 3:4], color='r')
 ax[1][0].set_title('')
 ax[1][0].set_xlabel('Days since 18/08/2021')
-ax[1][0].set_ylabel('Close Price')
+ax[1][0].set_ylabel('Close Price(SFr)')
 
 ax[1][1].plot(NESTLE_CLOSE, color='b')
 ax[1][1].plot(NORM_SIM_ONLY.iloc[:, 4:5], color='r')
@@ -201,7 +201,7 @@ ax[2][0].plot(NESTLE_CLOSE, color='b')
 ax[2][0].plot(NORM_SIM_ONLY.iloc[:, 6:7], color='r')
 ax[2][0].set_title('')
 ax[2][0].set_xlabel('Days since 18/08/2021')
-ax[2][0].set_ylabel('Close Price')
+ax[2][0].set_ylabel('Close Price(SFr)')
 
 ax[2][1].plot(NESTLE_CLOSE, color='b')
 ax[2][1].plot(NORM_SIM_ONLY.iloc[:, 7:8], color='r')
@@ -222,7 +222,7 @@ ax[0][0].plot(NESTLE_CLOSE, color='b')
 ax[0][0].plot(RESAMP_SIM_ONLY.iloc[:, 0:1], color='r')
 ax[0][0].set_title('Historical sim v nestle close')
 ax[0][0].set_xlabel('')
-ax[0][0].set_ylabel('Close Price')
+ax[0][0].set_ylabel('Close Price(SFr)')
 #---
 ax[0][1].plot(NESTLE_CLOSE, color='b')
 ax[0][1].plot(RESAMP_SIM_ONLY.iloc[:, 1:2], color='r')
@@ -240,7 +240,7 @@ ax[1][0].plot(NESTLE_CLOSE, color='b')
 ax[1][0].plot(RESAMP_SIM_ONLY.iloc[:, 3:4], color='r')
 ax[1][0].set_title('')
 ax[1][0].set_xlabel('Days since 18/08/2021')
-ax[1][0].set_ylabel('Close Price')
+ax[1][0].set_ylabel('Close Price(SFr)')
 
 ax[1][1].plot(NESTLE_CLOSE, color='b')
 ax[1][1].plot(RESAMP_SIM_ONLY.iloc[:, 4:5], color='r')
@@ -258,7 +258,7 @@ ax[2][0].plot(NESTLE_CLOSE, color='b')
 ax[2][0].plot(RESAMP_SIM_ONLY.iloc[:, 6:7], color='r')
 ax[2][0].set_title('')
 ax[2][0].set_xlabel('Days since 18/08/2021')
-ax[2][0].set_ylabel('Close Price')
+ax[2][0].set_ylabel('Close Price(SFr)')
 
 ax[2][1].plot(NESTLE_CLOSE, color='b')
 ax[2][1].plot(RESAMP_SIM_ONLY.iloc[:, 7:8], color='r')
@@ -295,22 +295,27 @@ plt.title('Histogram of actual daily returns of nestle share price from 04/10/20
 fig,ax=plt.subplots()
 plt.plot(nestle_close_price[:2730].tolist())
 plt.xlabel('Date')
-plt.ylabel('Nestle Close Price')
+plt.ylabel('Nestle Close Price(SFr)')
 plt.title('Daily nestle close price v date from 04/10/2010-18/08/2021')
 #-----
-cumulative_returns=nestle_daily_returns.cumsum().tolist()
-cumulative_returns_array=np.array(cumulative_returns)*100
+returns_array=np.array(nestle_daily_returns.loc[:'2021-08-18'].tolist())
+cumulative_returns=(((returns_array+1).cumprod())-1)*100
+
+
 fig,ax=plt.subplots()
-plt.plot(cumulative_returns_array)
+plt.plot(cumulative_returns)
 plt.xlabel('Days since 04/10/2010')
 plt.ylabel('Cumulative return (%)')
 plt.title('Cumulative daily percentage return v time for NESN')
 plt.show()#
-cumulative_returns=nestle_daily_returns.cumsum()
+
 
 print(NORM_SIM_ONLY.iloc[:,0:5].head(5))
 print(RESAMP_SIM_ONLY.iloc[:,0:5].head(5))
 print(NORM_SIM_ONLY.info())
+
+
+
 
 
 
