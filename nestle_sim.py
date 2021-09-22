@@ -59,7 +59,7 @@ print('**********************************************************')
 print(NORM.shape);print(RESAMP.shape)
 print(NORM.head());print(RESAMP.head())
 print(NORM.info());print(RESAMP.info())
-phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,15000)) #generate an array of 1x15000 random numbers picked
+phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,25000)) #generate an array of 1x15000 random numbers picked
                                                                   #from a gaussian distribution with a mean of 'mu' and
                                                                   # a standard deviation of 'standard_dev'
 
@@ -79,7 +79,7 @@ set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0] #variable lists have been set up
 get_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0] #they will be used to reset share prices between simulations
 #Here 1400 different simulations will be run
 
-for l in range(0,1400):    #1400 simulations will be run
+for l in range(0,2500):    #1400 simulations will be run
    y_1 = price_18aug2021    #reset y_1 and y_2 to the close price on 18/aug/2021 before the next
    y_2 = price_18aug2021    #monte carlo run of prices is generated
    norm_prices=set_price   #reset norm_prices array before it accepts 10 new Gaussian additions from the k indexed loop
@@ -118,6 +118,8 @@ MEAN_RS_plus_1STD=MEAN_RS_array+STD_RS_array;MEAN_RS_minus_1STD=MEAN_RS_array-ST
 MEAN_RS_plus_2STD=MEAN_RS_array+2*STD_RS_array;MEAN_RS_minus_2STD=MEAN_RS_array-2*STD_RS_array
 First_RESAMP_SIM_ONLY_sim = RESAMP_SIM_ONLY.iloc[:, 0:1] #Extract the random walk from the first column as an example
 
+
+print('********',NORM_SIM_ONLY.head())
 #Main plotting section of code --------------------------------------------------------------------------------------
 
 #First plot the actual nestle daily close price path from 18/09/2021 for 10 days
@@ -285,6 +287,8 @@ f = Fitter(nestle_daily_returns,
                           "t"])
 f.fit()
 print(f.summary())
+
+
 fig,ax=plt.subplots()
 nestle_daily_returns.plot(kind='hist',bins=50)
 plt.xlabel('Daily returns')
@@ -307,12 +311,29 @@ plt.plot(cumulative_returns)
 plt.xlabel('Days since 04/10/2010')
 plt.ylabel('Cumulative return (%)')
 plt.title('Cumulative daily percentage return v time for NESN')
+
+fig,ax=plt.subplots()
+plt.plot(NORM_SIM_ONLY.iloc[:,0:])
+plt.plot(NESTLE_CLOSE, color='k',marker='x')
+plt.plot(MEAN_NRM, color='w',marker='o')
+plt.xlabel('Days since 18/08/2021')
+plt.ylabel('Close Price(SFr)')
+plt.title('2500 simulated gaussian random walk share price trajectories')
+
+fig,ax=plt.subplots()
+plt.plot(RESAMP_SIM_ONLY.iloc[:,0:])
+plt.plot(NESTLE_CLOSE, color='k',marker='x')
+plt.plot(MEAN_RS, color='w',marker='o')
+plt.xlabel('Days since 18/08/2021')
+plt.ylabel('Close Price(SFr)')
+plt.title('2500 historically resampled random walk share price trajectories')
 plt.show()##
 
 
-print(NORM_SIM_ONLY.iloc[:,0:5].head(5))
-print(RESAMP_SIM_ONLY.iloc[:,0:5].head(5))
-print(NORM_SIM_ONLY.info())
+
+
+
+
 
 
 
