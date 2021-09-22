@@ -46,7 +46,7 @@ print('...')
 print(mu,standard_dev) #print the mean and standard deviation of the daily returns series
 print('...')
 
-Index_1=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20] #A list is created that will later index a data frame with 11 rows
+Index_1=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21] #A list is created that will later index a data frame with 11 rows
 NORM=pd.DataFrame();RESAMP=pd.DataFrame() #Two new dataframes are created that will later store simulated and
                                           #indexed stock price paths column by column
                                           #NORM will store Gaussian generated stock prices based on historical mean and std
@@ -59,14 +59,14 @@ print('**********************************************************')
 print(NORM.shape);print(RESAMP.shape)
 print(NORM.head());print(RESAMP.head())
 print(NORM.info());print(RESAMP.info())
-phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,40000)) #generate an array of 1x15000 random numbers picked
+phi= np.random.normal(loc=mu, scale=standard_dev, size=(1,52500)) #generate an array of 1x15000 random numbers picked
                                                                   #from a gaussian distribution with a mean of 'mu' and
                                                                   # a standard deviation of 'standard_dev'
 
-PEPSI_CLOSE= np.array(pepsi_close_price.iloc[2382:2403])     #get 11 pepsi close prices from 18/08/2021
+PEPSI_CLOSE= np.array(pepsi_close_price.iloc[2382:])     ##get 11 pepsi close prices from 18/08/2021
                                                                # plus 10 days when stock market is open
 
-pepsi_close_price_index=pepsi_close_price.iloc[2382:2403].index #get the dates from the pepsi close price series
+pepsi_close_price_index=pepsi_close_price.iloc[2382:].index #get the dates from the pepsi close price series
 pepsi_close_price_index=pd.to_datetime(pepsi_close_price_index) #and convert to datetime objects
 pepsi_close_price_index=pepsi_close_price_index.date            #drop the HH:MM:SS data and just keep the date.j
 print(pepsi_close_price_index)
@@ -75,16 +75,16 @@ print('**********************************************************')
 
 price_18aug2021 = pepsi_close_price.loc['18/08/2021']  # store the closing share price on the 18/08/2021 as a constant
 print('The price on 18/08/2021 is: ', price_18aug2021)  #float64 value and print
-set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] #variable lists have been set up to store share price simulation data
-get_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] #they will be used to reset share prices between simulations
+set_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] #variable lists have been set up to store share price simulation data
+get_price=[price_18aug2021,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] #they will be used to reset share prices between simulations
 #Here 1400 different simulations will be run
 
-for l in range(0,2000):    #1400 simulations will be run
+for l in range(0,2500):    #1400 simulations will be run
    y_1 = price_18aug2021    #reset y_1 and y_2 to the close price on 18/aug/2021 before the next
    y_2 = price_18aug2021    #monte carlo run of prices is generated
    norm_prices=set_price   #reset norm_prices array before it accepts 10 new Gaussian additions from the k indexed loop
    resamp_prices=get_price #reset resamp_prices array before it accepts 10 new resampled additions from the k indexed loop
-   for k in range(0,20):
+   for k in range(0,21):
       y_1 = y_1+y_1*(phi[0][l+k]) #multiply the previous day's closing price by a Gaussian generated return value
       y_2 = y_2+y_2*(np.random.choice(pepsi_daily_returns)) #multiply the previous day's closing price by a historicallly resampled return value
       norm_prices[k+1]=y_1       #store the new gaussian generated closing price in the list norm_prices
@@ -136,7 +136,7 @@ ax[0].plot(MEAN_NRM_plus_2STD,color='m',linestyle='--',label="MEAN+2sigma") #dai
 ax[0].legend()
 ax[0].plot(MEAN_NRM_minus_2STD,color='m',linestyle='--',label="MEAN-2sigma") #daily close price path that is +2 std from the mean path
 ax[0].legend()
-ax[0].set_title('1400 Gaussian sim runs v Actual close price  ') #plot title
+ax[0].set_title('2500 Gaussian sim runs v Actual close price  ') #plot title
 ax[0].set_xlabel('Days since 18/08/2021') #plot x label
 ax[0].set_ylabel('Close Price($)') #plot y label
 
@@ -155,7 +155,7 @@ ax[1].plot(MEAN_RS_plus_2STD,color='m',linestyle='--',label="MEAN+2sigma")
 ax[1].legend()
 ax[1].plot(MEAN_RS_minus_2STD,color='m',linestyle='--',label="MEAN-2sigma")
 ax[1].legend()
-ax[1].set_title('1400 sim runs of resampled data v actual close price  ')
+ax[1].set_title('2500 sim runs of resampled data v actual close price  ')
 ax[1].set_xlabel('Days since 18/08/2021')
 ax[1].set_ylabel('Close Price($)')
 
@@ -305,8 +305,23 @@ plt.plot(cumulative_returns_array)
 plt.xlabel('Days since 01/03/2012')
 plt.ylabel('Cumulative return (%)')
 plt.title('Cumulative daily percentage return v time for PEP')
-plt.show()#
 
+fig,ax=plt.subplots()
+plt.plot(NORM_SIM_ONLY.iloc[:,0:])
+plt.plot(PEPSI_CLOSE, color='k',marker='x')
+plt.plot(MEAN_NRM, color='w',marker='o')
+plt.xlabel('Days since 18/08/2021')
+plt.ylabel('Close Price($)')
+plt.title('2500 simulated gaussian random walk share price trajectories')
+
+fig,ax=plt.subplots()
+plt.plot(RESAMP_SIM_ONLY.iloc[:,0:])
+plt.plot(PEPSI_CLOSE, color='k',marker='x')
+plt.plot(MEAN_RS, color='w',marker='o')
+plt.xlabel('Days since 18/08/2021')
+plt.ylabel('Close Price($)')
+plt.title('2500 historically resampled random walk share price trajectories')
+plt.show()##
 
 print(NORM_SIM_ONLY.iloc[:,0:5].head(5))
 print(RESAMP_SIM_ONLY.iloc[:,0:5].head(5))
