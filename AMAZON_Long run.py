@@ -22,7 +22,7 @@ print('The price on 17/09/2021 is: ', price_17sep2021)
 set_price=np.array([price_17sep2021,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) #create a constant list of 20 values to be referenced
 print                                                               #within the loop structure to follow.#in one run generate 20 simulated closing prices from 18/08/2021 onwards and add this singe run as a column of data
 
-for l in range(0,1000):    #100 simulations will be run
+for l in range(0,2500):    #100 simulations will be run
    y = price_17sep2021    #reset y to the close price on 18/aug/2021
    prices_1=set_price     #reset prices_1 array before it accepts new values from the k indexed loop
    for k in range(0,43):
